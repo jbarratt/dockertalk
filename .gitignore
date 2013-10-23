@@ -1,0 +1,5 @@
+vagrant_ansible_inventory_default
+outline.md
+build
+.DS_Store
+.vagrant*

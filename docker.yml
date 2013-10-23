@@ -1,0 +1,28 @@
+---
+- name: Install docker
+  hosts: all
+  # accelerate: true
+  tasks:
+    - name: Install linux kernel
+      apt: name={{ item }} state=latest update_cache=yes
+      with_items:
+      - linux-image-generic-lts-raring
+      - linux-headers-generic-lts-raring
+      notify:
+      - reboot host
+      
+    - name: Enable PPA and Install Deps
+      apt: name={{ item }} state=latest update_cache=yes
+      with_items:
+      - software-properties-common
+      - python-pycurl
+
+    - name: Add docker PPA
+      apt_repository: repo=ppa:dotcloud/lxc-docker
+
+    - name: Install docker
+      apt: name=lxc-docker state=latest update_cache=yes
+
+  handlers:
+  - name: reboot host
+    command: /sbin/reboot -t now

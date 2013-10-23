@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>The Revolution will be Containerized</title>
+
+		<meta name="description" content="The Past, Present and Future of Containers for Applications">
+		<meta name="author" content="Joshua Barratt">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+		<div class="reveal">
+			<div class="slides">
+                <section>
+                    <h2>The Revolution Will Be</h2>
+                    <img src="img/ContainerImage.png" class="stretched" style="border:none;background:none;"/>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section data-background="img/eniac.jpg">
+                    <h1>In the beginning, there was the computer<h1>
+                    <aside class="notes">
+                    From the beginning we've neededto figure out how to share these things.
+                    It wasn't long after the first computer that Time Sharing started (1957)
+                    </aside>
+                </section>
+                <section>
+                    <h2>What do we need to share?</h2>
+                    <img src="img/sharing.png" style="border:none;background:none;"/>
+                    <ol>
+                        <li class="fragment"><strong>Resources:</strong> We all get enough (but not too much)</li>
+                        <li class="fragment"><strong>Security/Privacy:</strong> We stay out of each other's stuff</li>
+                        <li class="fragment"><strong>Dependencies:</strong> Apps & Libs I need</li>
+                    </ol>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>Many Strategies</h2>
+                    <img src="img/MachineSharingSpectrum.png" class="stretch" style="background:#f5f5f5" />
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>Impacts</h2>
+                    <img src="img/MachineSharingSpectrumCurves.png" class="stretch" style="background:#f5f5f5" />
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>"The Cloud"</h2>
+                    <p>
+                    The cloud is built mostly around IaaS/VM technology.
+                    EC2, VMWare, KVM, Xen
+                    OS Images
+                    TODO (Drop an arrow onto the zenline)
+                    </p>
+                    <aside class="notes">
+                    This seems to be the de-facto way to deploy apps these days.
+                    Tons of development work has gone into figuring out how to make this work.
+                    </aside>
+                </section>
+                <section>
+                    <h2>Virtuozzo/OpenVZ ("Thick Containers")</h2>
+                    <p>
+                    TODO put a dot on the numberline
+                    </p>
+                    <aside class="notes">
+                    This sparked my love for containers as it's what we do at (mt)
+                    Much higher memory desnity, lower startup time, copy-on-write filesystem, but still acts like a whole system.
+                    Other players here, Solaris Zones.
+                    </aside>
+                </section>
+                <section>
+                    <h2>Density/Efficiency: We should care.</h2>
+                    <ol class="stretch">
+                        <li class="fragment">Profit
+                        <ul>
+                            <li>Extra servers, networking gear</li>
+                            <li>Power Costs</li>
+                        </ul>
+                        </li>
+                        <li class="fragment">Performance
+                        <ul>
+                            <li>See (1)</li>
+                        </ul>
+                        </li>
+                        <li class="fragment">Social and Environmental Responsibility
+                            <ul>
+                                <li>Power usage = C02</li>
+                                <li>Manufature = Precious Metals, Toxic Waste</li>
+                                <li>Also, can be terrible conditions.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <aside class="notes">
+                    TODO progressive
+                    Powering & Cooling a server for 3-8 months will generally equal the original costs of the device.
+                    By Density I mean "how densely we can pack services without degrading service quality." Not overselling.
+                    </aside>
+                </section>
+                <section>
+                    <h2>On Power</h2>
+                    <p>
+                    TODO snappy inforgaphic
+                    Power density in the DC is [very important](http://slashdot.org/topic/datacenter/datacenter-power-still-largely-driven-by-coal/).
+                    </p>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>TL;DR Today's Cloud Might Need Improvement</h2>
+                    <p>
+                    </p>
+                    <aside class="notes">
+                    Let's take a look at the workload.
+                    </aside>
+                </section>
+                <section>
+                    <h2>Apps & Server Layer</h2>
+                    <p>
+                    How do we ship our applications?
+                    </p>
+                    <aside class="notes">
+                    It depends, lots of strategies.
+                    </aside>
+                </section>
+                <section>
+                <h2>I ♥  Packages</h2>
+                    <img src="img/packages_opinion.png" class="stretch" />
+                    <aside class="notes">
+                    Basic rules of thumb. If it's a bit on the server, it's either configuration (puppet/chef/etc) or it's code and assets (packages) that comes from the repo. The end.
+                    This was based on the the idea that a server was a very through-line thing. That you needed to keep the whole 'computer as an ecosystem' healthy for the long haul, through upgrades and more. Still very valid in many use cases.
+                    </aside>
+                </section>
+                <section>
+                    <h2>A Hypothetical Python App</h2>
+                    <ol>
+                        <li class="fragment">We need python 3.2. Damn, distro doesn't provide it.</li>
+                        <li class="fragment">Need a library that clashes with the system's version. Damn.</li>
+                        <li class="fragment">We package the whole mess, using <code>virtualenv</code> and some glue.</li>
+                        <li class="fragment">Oh, and we need redis 2.6 for Lua support. Distro has 2.4. Triple damn.</li>
+                        <li class="fragment">Oh, and the QA team has standardized on Centos.</li>
+                        <li class="fragment">Oh, BTW, the new search service is a node.js app, that's cool, right?</li>
+                    </ol>
+                    <aside class="notes">
+                    Let's walk through a simple modern case.
+                    </aside>
+                </section>
+                <section>
+                    <h2>... 3 months later</h2>
+                    <p>
+                    7. There's a new openssl package out, very urgent security issue!
+                    </p>
+                    <ul>
+                        <li>Huh.</li>
+                        <li class="fragment">Can I push it?</li>
+                        <li class="fragment">Which apps use it?</li>
+                        <li class="fragment">Which apps will break?</li>
+                    </ul>
+                    <p>
+                    Oh, and we're also stuck if one of those apps gets exploited, or tries to use all the resources on the box...
+                    </p>
+                    <aside class="notes">
+                    It's a hot mess.
+                    </aside>
+                </section>
+                <section>
+                    <h2>Netflix Model</h2>
+                    <ul>
+                        <li>Bake an entire server image</li>
+                        <li>Test as a unit</li>
+                        <li>Use for deploy and rollback</li>
+                    </ul>
+                    <p>
+                    Progress! But, 'the computer' is a very chunky unit of abstraction.
+                    </p>
+                    <aside class="notes">
+                    Not sure if they invented it, but the first use case I saw.
+                    </aside>
+                </section>
+                <section>
+                    <h2>The Tricky Bits</h2>
+                    <ul>
+                        <li>Lots of sysadmin surface area</li>
+                        <li>Additional Daemons to run & manage</li>
+                        <li>Large images to juggle. 1 byte change? 0.5 GB image.</li>
+                        <li>Boot Times. 2-120 seconds.</li>
+                        <li>Density isn't great.</li>
+                    </ul>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>Taking an F650 to the Grocery Store...</h2>
+                    <p>
+                    </p>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>What about PaaS?</h2>
+                    <p class="fragment">Cool! "Process Virtualization Not Server Virtualization."
+                    </p>
+                    <p class="fragment">Sort of.</p>
+                    <ul class="fragment">
+                        <li>Local dev, QA, staging can be tough to clone their versions of.</li>
+                        <li>Hard upper bound on troubleshooting</li>
+                        <li>Generally fixed userland</li>
+                        <li>Lots of capability limits (daemons, storage, networking, etc)</li>
+                    </ul>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>DREAM WITH ME</h2>
+                    <p>
+                    TODO show the line diagram with: keep (resource controls & isolation, custom userland, network, local ownership & hacking) but Drop (extra daemons, virtualization layers not needed, duplicate kernels, time, bloat)
+                    </p>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <img class="stretch" src="img/mobydock.png">
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>What is Docker?</h2>
+                    <p>
+                    Services on LXC(+); implemented in Go
+                    TODO draw diagram
+                    </p>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>Portability & Density</h2>
+                    <ul>
+                        <li>Extremely Lightweight</li>
+                        <li>Build containers manually or with many flavors of repeatable process</li>
+                        <li>Run those on local, dev, QA, stage, prod, cloud, PaaS...</li>
+                    </ul>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>Who is Docker?</h2>
+                    <p>Tons of people!</p>
+                    <ul>
+                        <li>Open Sourced by dotCloud, part of a family of other great tools. (hipache)</li>
+                        <li>&lt; 1 year old, but hundreds of committers, and it's blogged about constantly</li>
+                        <li>Quick Survey?</li>
+                    </ul>
+                    <aside class="notes">
+                    Note here I'm not in the project, some of my team has contributed to docker, and we've been evaluating it heavily internally for many projects.
+                    </aside>
+                </section>
+                <section>
+                    <h2>Docker Lifecycle</h2>
+                    <p>
+                    Index/Image/Container/Image' lifecycle
+                    </p>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>How does it help?</h2>
+                    <ul>
+                        <li><strong>Density!</strong>
+                            <ul>
+                                <li>Great (native) out of the box</li>
+                                <li>Add 'idle mode' for BLAMMO</li>
+                                <li>Can also limit RAM/CPU/blk io/net</li>
+                            </ul>
+                        </li>
+                        <li>Private and Public Repos</li>
+                        <li>Image Stacking = Minimal Upgrade Payloads</li>
+                        <li><strong>Consistency</strong> @ every stage</li>
+                        <li>Minimum Viable Moving Parts</li>
+                    </ul>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>Less Moving Parts FTW</h2>
+                    <blockquote cite="http://ngauthier.com/2013/10/using-docker-to-parallelize-rails-tests.html#comment-1081998565">
+                        <p>
+                        &ldquo;We've switched to Docker from Vagrant/Virtualbox to isolate test runs on our CI server. We have seen major speed improvements in some cases, but mostly we are seeing much more stable runs with fewer tests that just randomly fail on CI, or cases where the VM would stop responding completely or fail to launch.&rdquo;
+                        </p>
+                        <p>-- Dan Ivovich</p>
+                    </blockquote>
+                    <p>
+                    </p>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section data-background="img/dirtyhands.jpg">
+                    <h1>Let's Get Our Hands Dirty</h1>
+                    <!-- Image Courtesy of http://www.flickr.com/photos/film_fatale/6784851995/ -->
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>Docker CLI Basics</h2>
+                    <p>$ sudo docker</p>
+                    <ul>
+                        <li><strong>ps</strong>: List <em>containers</em></li>
+                        <li><strong>images</strong>: List <em>images</em></li>
+                        <li><strong>run</strong>: Create container from image</li>
+                        <li><strong>start/stop</strong>: Stop a container</li>
+                        <li><strong>build</strong>: Create an image from a Dockerfile</li>
+                        <li><strong>inspect</strong>: Inspect an image</li>
+                        <li><strong>logs</strong>: Review STD(OUT|ERR) from a container</li>
+                    </ul>
+                    <aside class="notes">
+                    </aside>
+                </section>
+			    <section>
+					<h2>Any containers running?</h2>
+					<pre class="stretch"><code data-trim>
+vagrant@precise64:~/docker$ sudo docker ps
+ID                  IMAGE               COMMAND             CREATED             STATUS              PORTS
+					</code></pre>
+				</section>
+                <section>
+                    <h2>Ok, start one based on the ubuntu image.</h2>
+                    <pre class="stretch"><code data-trim contenteditable>
+vagrant@precise64:~/docker$ sudo docker run -i -t ubuntu:12.10 bash
+root@7f407e484d62:/# apt-get update
+# lots of apt-get stuff
+root@7f407e484d62:/# apt-get install redis-server
+# lots of apt-get stuff
+root@7f407e484d62:/# exit
+vagrant@precise64:~/docker$ sudo docker ps -a
+ID                  IMAGE               COMMAND             CREATED             STATUS              PORTS
+7f407e484d62        ubuntu:12.10        bash                56 seconds ago      Exit 0
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Tag it!</h2>
+                    <pre class="stretch"><code data-trim>
+vagrant@precise64:~/docker$ sudo docker commit -m "installed redis server" 7f407e484d62 jbarratt/redis01
+517800321f48
+vagrant@precise64:~/docker$ sudo docker images
+REPOSITORY          TAG                 ID                  CREATED             SIZE
+ubuntu              12.04               8dbd9e392a96        6 months ago        131.5 MB (virtual 131.5 MB)
+ubuntu              12.10               b750fe79269d        7 months ago        24.65 kB (virtual 180.1 MB)
+ubuntu              latest              8dbd9e392a96        6 months ago        131.5 MB (virtual 131.5 MB)
+ubuntu              precise             8dbd9e392a96        6 months ago        131.5 MB (virtual 131.5 MB)
+ubuntu              quantal             b750fe79269d        7 months ago        24.65 kB (virtual 180.1 MB)
+jbarratt/redis01    latest              517800321f48        56 seconds ago      98.46 MB (virtual 278.6 MB)
+                    </code></pre>
+                </section>
+			    <section>
+					<h2>But, we made an image, not container.</h2>
+                    <pre class="stretch"><code data-trim>
+vagrant@precise64:~/docker$ sudo docker ps
+ID                  IMAGE               COMMAND             CREATED             STATUS              PORTS
+					</code></pre>
+				</section>
+                <section>
+                    <h2>Try it again, with more daemon!</h2>
+                    <pre class="stretch"><code data-trim>
+vagrant@precise64:/var$ sudo docker run -p 6379 -d -i \
+    -t jbarratt/redis01 /usr/bin/redis-server
+8222ea69d3a3
+
+vagrant@precise64:/var$ sudo docker ps
+ID                  IMAGE                     COMMAND                 PORTS
+8222ea69d3a3        jbarratt/redis01:latest   /usr/bin/redis-server   49153->6379
+
+vagrant@precise64:/var$ telnet 172.17.42.1 49153
+Connected to 172.17.42.1.
+Escape character is '^]'.
+    > rpush users josh
+    > rpush users sam
+    > rpush users susan
+    > llen users
+:3
+    > lrange users 0 5
+josh sam susan
+                    </code></pre>
+                    <aside class="notes">
+                    Worth noting here: See the port forwarded in. See that now we have a working redis server.
+                    </aside>
+                </section>
+                <section>
+                    <h2>Want STDOUT?</h2>
+                    <pre class="stretch"><code data-trim>
+vagrant@precise64:/var$ sudo docker attach 8222ea69d3a3
+[1] 23 Oct 00:06:36 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+[1] 23 Oct 00:06:36 - 0 clients connected (0 slaves), 791000 bytes in use
+...
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>What's going on?</h2>
+                    <pre class="stretch"><code data-trim>
+vagrant@precise64:/var$ ps xwf
+495  ?        Ss     0:00 /bin/sh -e -c /usr/bin/docker -d /bin/sh
+496  ?        Sl     0:24  \_ /usr/bin/docker -d
+3115 pts/1    Ss+    0:00      \_ lxc-start -n 8222ea(...) -f /var/lib/docker/
+3120 pts/1    Sl+    0:48          \_ /usr/bin/redis-server
+                    </code></pre>
+                    <aside class="notes">
+                    Can see quite a bit. The docker daemon is using LXC to start a container.
+                    This is actually an asset because it means as LXC improves so does docker
+                    It's got the hash set to that (truncated) value
+                    Inside there is running our redis server.
+                    </aside>
+                </section>
+                <section>
+                    <h2>Container-eye view... 1 != 3120</h2>
+                    <pre class="stretch"><code data-trim>
+vagrant@precise64:/var$ sudo lxc-attach -n 8222ea(...)
+fc51fae86a46603bc3762 /bin/bash
+root@8222ea69d3a3:/var# ps auxwwf
+USER       PID TTY      STAT START   TIME COMMAND
+root         1 ?        Sl+  Oct22   0:52 /usr/bin/redis-server
+                    </code></pre>
+                    <aside class="notes">
+                    There's not yet a docker-way to run a bonus command inside a container, but we can launch a new one with lxc-attach. (Might be deprecated if they move from LXC to something more abstract like libvirt)
+                    Either way, for now, we can check it out.
+                    </aside>
+                </section>
+                <section>
+                    <h2>Namespaces are Magic</h2>
+                    <ul>
+                        <li>pid</li>
+                        <li>net</li>
+                        <li>ipc</li>
+                        <li>mnt</li>
+                        <li>uts (hostname)</li>
+                        <li>user (unpriv. control)</li>
+                    </ul>
+                    <aside class="notes">
+                    A lot of what makes these hyper-lightweight containers work is a mature kernel feature called namespaces. Lets them have their own process spaces, network stacks (including iptables rules), IPC (semaphores & shared memory), filesystem mounts, and fake hostnames. User namespace is newish but will allow even unpriv users to launch containers, which is security++.
+                    </aside>
+                </section>
+                <section>
+                    <h2>Union Filesystems are Magic</h2>
+                    <pre class="stretch"><code data-trim>
+root@precise64:/var/lib/docker/containers# ls
+15f3c09e26eef579dfa53035fbdde536f07fb124c473b146df73fd4c7f2be33c
+7a3dad48db07177ffdd6ae77104585a3a0f43d88400f4c3affc258685c835dd0
+7f407e484d62e50ce05c14c83d47b136d590f37054084a44f3370a721bb0116a
+8222ea69d3a344edd2a734423c53ef17dc4de194bb4fc51fae86a46603bc3762
+root@precise64:/var/lib/docker/containers# ls 8222(...)
+bb4fc51fae86a46603bc3762/rw/
+dump.rdb
+
+root@precise64:/var/lib/docker/containers# docker diff 8222
+A /dump.rdb
+
+vagrant@precise64:/var$ sudo lxc-attach -n 8222(...) /bin/bash
+root@8222ea69d3a3:/var# mkdir /foo && touch /foo/bar
+root@8222ea69d3a3:/var# exit
+
+vagrant@precise64:~# docker diff 8222
+A /dump.rdb
+A /foo
+A /foo/bar
+                    </code></pre>
+                <aside class="notes">
+                These are the guts of the AUFS filesystems.
+                If you cracked open our jbarratt/redis-server image you'd see the results of our upgrading and installing the package.
+                </aside>
+                </section>
+                <section>
+                    <h2>Docker tracks the linkages...</h2>
+                    <pre><code data-trim>
+vagrant@precise64~$ sudo docker images -viz | dot -Tpng -o docker.png
+                    </code></pre>
+                    <img class="stretch" src="img/docker_dot.png"/>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>cgroups are magic</h2>
+                    <pre class="stretch"><code data-trim>
+root@precise64:~# cat /sys/fs/cgroup/cpuacct/lxc/8222(...)/cpuacct.usage
+63976740039
+root@precise64:~# cat /sys/fs/cgroup/cpuacct/lxc/8222(...)/cpuacct.usage
+63986569761
+root@precise64:~# cat /sys/fs/cgroup/memory/lxc/8222(...)/memory.usage_in_bytes
+2433024
+root@precise64:~# cat /sys/fs/cgroup/memory/lxc/8222(...)/memory.limit_in_bytes
+9223372036854775807 
+                    </code></pre>
+                <aside class="notes">
+                    Note CPU us a counter
+                    So we can do what we need to for limiting/accounting/tracking what happens from these containers.
+                    Obviously this isn't a very restrictive memory limit., docker run -m will let you set it tighter.
+                </aside>
+                </section>
+                <section>
+                    <h2>But Is It Fast?</h2>
+                    <pre class="stretch"><code data-trim>
+root@precise64:~# docker stop 8222
+root@precise64:~# time docker start 8222
+    real    0m0.150s
+
+root@precise64:~# time service redis-server start
+Starting redis-server: redis-server.
+    real    0m0.165s
+
+root@precise64:~# time docker run -p 6379 -d -i -t jbarratt/redis01 /usr/bin/redis-server
+    real    0m0.147s
+                    </code></pre>
+                    <aside class="notes">
+                    Yes, yes it is. Takes about the same amount of time (~150ms) to start it as it does natively on a system -- or, even sexier, to create a NEW CONTAINER and launch it.
+                    </aside>
+                </section>
+                <section>
+                    <h2>That Sucks. You built that by hand.</h2>
+                    <ul>
+                        <li class="fragment">Yep. The Devops Gods are angry. REPEATABLE BUILDS! they say.</li>
+                        <li class="fragment">The cool part? You can automate it however you want.</li>
+                    </ul>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>Enter Dockerfile</h2>
+                    <pre class="stretch"><code data-trim>
+# redis image
+# VERSION 0.1
+
+FROM ubuntu:12.10
+MAINTAINER Joshua Barratt jbarratt@serialized.net
+
+RUN apt-get -qq update
+RUN apt-get install -y redis-server
+
+EXPOSE 6379
+CMD ["/usr/bin/redis-server"]
+                    </code></pre>
+                </section>
+                <section>
+                    <h2></h2>
+                    <pre class="stretch"><code data-trim>
+vagrant@precise64:/vagrant/redis$ sudo docker build -t jbarratt/redis-dockerfile .
+Uploading context 10240 bytes
+Step 1 : FROM ubuntu:12.10
+ ---> b750fe79269d
+Step 2 : MAINTAINER Joshua Barratt jbarratt@serialized.net
+ ---> Using cache
+ ---> 0501ea3da390
+Step 3 : RUN apt-get -qq update
+ ---> Using cache
+ ---> 134cfdc556cb
+Step 4 : RUN apt-get install -y redis-server
+ ---> Using cache
+ ---> 01ba2afd847f
+Step 5 : EXPOSE 6379
+ ---> Using cache
+ ---> 9ac5730000e7
+Step 6 : CMD ["/usr/bin/redis-server"]
+ ---> Running in 713d6ab6d7d8
+ ---> 60d75fbc2eac
+Successfully built 60d75fbc2eac
+
+vagrant@precise64:/vagrant/redis$ sudo docker run jbarratt/redis-dockerfile
+
+vagrant@precise64:/vagrant/redis$ sudo docker ps
+ID                  IMAGE                              COMMAND                 PORTS
+bbd790b7dfcd        jbarratt/redis-dockerfile:latest   /usr/bin/redis-server   49162->6379
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Layering Dockerfiles</h2>
+                    <pre><code data-trim>
+FROM jbarratt/redis-dockerfile
+MAINTAINER Joshua Barratt jbarratt@serialized.net
+
+ADD fixtures.sh /tmp/fixtures.sh
+RUN /tmp/fixtures.sh
+                    </code></pre>
+                    <pre class="stretch"><code data-trim>
+#!/bin/bash
+
+/usr/bin/redis-server &
+for ((i=1; i <=100; i++))
+do
+    redis-cli rpush numbers $i
+done
+redis-cli shutdown
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Layering Dockerfiles</h2>
+                    <pre class="stretch"><code data-trim>
+vagrant@precise64:/vagrant/redis-fixture$ sudo docker build -t jbarratt/redis-fixture .
+Uploading context 10240 bytes
+Step 1 : FROM jbarratt/redis-dockerfile
+ ---> 60d75fbc2eac
+Step 2 : MAINTAINER Joshua Barratt jbarratt@serialized.net
+ ---> Running in 0d8bf423b2bc
+ ---> a5c3e1b51ceb
+Step 3 : ADD fixtures.sh /tmp/fixtures.sh
+ ---> c4170f7490e1
+Step 4 : RUN /tmp/fixtures.sh
+ ---> Running in 0ca9a42ca15d                    
+[10] 23 Oct 05:21:32 - Client closed connection
+[10] 23 Oct 05:21:32 - Accepted 127.0.0.1:54281
+[10] 23 Oct 05:21:32 # User requested shutdown...
+[10] 23 Oct 05:21:32 * Saving the final RDB snapshot before exiting.
+[10] 23 Oct 05:21:32 * DB saved on disk
+[10] 23 Oct 05:21:32 # Redis is now ready to exit, bye bye...
+ ---> 835789acdc85
+Successfully built 835789acdc85
+                    </code></pre>
+                </section>
+                <section>
+                    <h2></h2>
+                    <pre class="stretch"><code data-trim>
+vagrant@precise64:/vagrant/redis-fixture$ sudo docker run jbarratt/redis-fixture
+[8] 23 Oct 05:28:30 * The server is now ready to accept connections on port 6379
+[8] 23 Oct 05:28:31 - DB 0: 1 keys (0 volatile) in 4 slots HT.
+
+vagrant@precise64:/vagrant/redis-fixture$ sudo docker ps
+ID                  IMAGE                               STATUS              PORTS
+8eced7aaefbf        jbarratt/redis-fixture:latest       Up 28 seconds       49173->6379
+bbd790b7dfcd        jbarratt/redis-dockerfile:latest    Up 25 minutes       49162->6379
+
+vagrant@precise64:/vagrant/redis-fixture$ redis-cli -p 49173
+
+redis 127.0.0.1:49173> lrange numbers 0 5
+1) "2" 2) "3" 3) "4" 4) "5" 5) "6" 6) "7"
+                    </code></pre>
+                </section>
+                <section>
+                    <h2>Ideally..</h2>
+                    <p>
+                    * TODO demo building an app (off index? Image svc?)
+                    * Pushing it to cloud
+                    </p>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>Ecosystem</h2>
+                    <p>Huge and Growing.</p>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>Not Just Docker</h2>
+                    <ul>
+                        <li>LXC vanilla // OpenStack</li>
+                        <li>CloudLinux</li>
+                        <li>lmctfy</li>
+                    </ul>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>But Docker is Crazy.</h2>
+                    <ul>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>OpenStack: Booting a Container</h2>
+                    <img src="img/docker-nova-boot.png" />
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>OpenStack: Checking Running Containers</h2>
+                    <img src="img/docker-nova-running.png" />
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>OpenStack Heat Orchestration</h2>
+					<pre><code data-trim>
+$ docker pull samalba/wordpress
+$ docker pull samalba/mysql
+$ heat stack-create wordpress -f templates/wordpress_mysql.yml
+                    </code></pre>
+					<pre><code data-trim>
+$ heat stack-list
++--------------------------------------+------------+-----------------+
+| id                                   | stack_name | stack_status    |
++--------------------------------------+------------+-----------------+
+| 239cc009-00fe-4c6f-ac67-f8873df38f08 | wordpress  | CREATE_COMPLETE |
++--------------------------------------+------------+-----------------+
+                    </code></pre>
+					<pre><code data-trim>
+docker ps
+ID            IMAGE                     COMMAND               PORTS
+5513c532b4dc  samalba/wordpress:latest  /usr/sbin/apache2 -D  49174->80
+b98d764d109d  samalba/mysql:latest      /start_mysqld.sh      49173->3306
+                    </code></pre>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>Security</h2>
+                    <ul>
+                        <li>Pretty tested stuff</li>
+                        <li>Ubuntu ships with extra hardening</li>
+                        <li>Can be layered (e.g. OpenShift)</li>
+                        <li>Lower priv mode coming soon</li>
+                        <li>New challenges (library/distro sprawl.)</li>
+                    </ul>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>How do I play?</h2>
+                    <pre><code data-trim>
+                    curl http://get.docker.io | sudo sh
+                    </code></pre>
+                    <p>Or</p>
+                    <pre class="stretch"><code data-trim>
+# Install vagrant, then...
+$ git clone https://github.com/dotcloud/docker.git
+$ vagrant up
+$ vagrant ssh
+$ sudo docker
+                    </code></pre>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>Should I do more than play?</h2>
+                    <ul>
+                        <li>Not rated as "production ready" due to API volatility</li>
+                        <li>Very usable for nearline applications (e.g. testing)</li>
+                    </ul>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>Bonus: Dockception!</h2>
+                    <pre class="stretch"><code data-trim>
+FROM ubuntu
+MAINTAINER Joshua Barratt jbarratt@serialized.net
+
+RUN apt-get -qq update
+RUN apt-get install -y python3
+
+ADD talk /talk
+
+EXPOSE 8080:8080
+WORKDIR /talk
+CMD ["python3", "-m", "http.server", "8080"]
+                    </code></pre>
+                    <aside class="notes">
+This talk itself is being served out of a docker container. DID I JUST BLOW YOUR MIND?
+                    </aside>
+                </section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: false,
+				progress: false,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
