@@ -126,8 +126,7 @@
                 </section>
                 <section>
                     <h2>TL;DR Today's Cloud Might Need Improvement</h2>
-                    <p>
-                    </p>
+                    <img src="img/fatcat.gif" class="stretch" />
                     <aside class="notes">
                     Let's take a look at the workload.
                     </aside>
@@ -202,7 +201,7 @@
                         <li>Lots of sysadmin surface area</li>
                         <li>Additional Daemons to run & manage</li>
                         <li>Large images to juggle. 1 byte change? 0.5 GB image.</li>
-                        <li>Boot Times. 2-120 seconds.</li>
+                        <li>Boot Times. 2 seconds - 15 mins (OpenStack nodepool)</li>
                         <li>Density isn't great.</li>
                     </ul>
                     <aside class="notes">
@@ -695,6 +694,31 @@ redis 127.0.0.1:49173> lrange numbers 0 5
                     </code></pre>
                 </section>
                 <section>
+                    <h2>CLI API is great (As is the <em>REST</em>)</h2>
+                    <small>See Dokku for craziness...</small>
+                    <pre class="stretch"><code data-trim>
+#!/bin/bash
+
+if [ $# -eq 0 ]
+then; echo "Usage: ./rebuilt.sh (tag)"; exit; fi
+
+if [[ $EUID -ne 0 ]]
+then ; echo "Docker needs sudo or root." ; exit ; fi
+
+OLDCONTAINER=$(docker ps | grep $1 | cut -d ' ' -f 1)
+
+if [ -z $OLDCONTAINER ]
+then
+    echo "No container found tagged $1"
+    exit
+fi
+
+docker build -t $1 .
+docker stop $OLDCONTAINER
+docker run -d $1
+                    </code></pre>
+                </section>
+                <section>
                     <h2>The Docker Index Is Cool</h2>
                     <pre class="stretch"><code data-trim>
 vagrant@precise64:~/docker-registry$ sudo docker pull crosbymichael/ipython
@@ -779,6 +803,7 @@ ID            IMAGE                     COMMAND               PORTS
 5513c532b4dc  samalba/wordpress:latest  /usr/sbin/apache2 -D  49174->80
 b98d764d109d  samalba/mysql:latest      /start_mysqld.sh      49173->3306
                     </code></pre>
+                    Hybrid Workloads. Cool.
                     <aside class="notes">
                     </aside>
                 </section>
