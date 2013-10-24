@@ -242,11 +242,32 @@
                 </section>
                 <section>
                     <h2>What is Docker?</h2>
-                    <p>
-                    Services on LXC(+); implemented in Go
-                    TODO draw diagram
-                    </p>
+                    <blockquote>
+                        &ldquo;Docker is an open-source project to easily create lightweight, portable, self-sufficient containers from any application.&rdquo;
+                    </blockquote>
                     <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>What is Docker?</h2>
+                    <img src="img/docker_nested_arch.png" class="stretch" style="background:none;border:none;"/>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>What is Docker?</h2>
+                    <img src="img/docker_3d_arch.png" class="stretch" style="background:#f5f5f5;"/>
+                    <aside class="notes">
+                    Sphere of docker in the center, 3 axes coming out for cgroups, namespaces, filesystem
+                    Concerns are orthogonal to each other
+                    Outside of Docker, all tools listed are useful on their own if you need something more lightweight.
+                    </aside>
+                </section>
+                <section data-background="img/rh_logo.jpg">
+                    <h2>Thanks RedHat!</h2>
+                    <aside class="notes">
+                    device-mapper is in the kernel (LVM2, thin provisioning)
+                    RH helped with porting since AUFS is not in the kernel
                     </aside>
                 </section>
                 <section>
@@ -273,9 +294,40 @@
                 </section>
                 <section>
                     <h2>Docker Lifecycle</h2>
-                    <p>
-                    Index/Image/Container/Image' lifecycle
-                    </p>
+                    <img src="img/docker_terms_01.png" class="stretch" style="background:#f5f5f5;"/>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>Docker Lifecycle</h2>
+                    <img src="img/docker_terms_02.png" class="stretch" style="background:#f5f5f5;"/>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>Docker Lifecycle</h2>
+                    <img src="img/docker_terms_03.png" class="stretch" style="background:#f5f5f5;"/>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>Docker Lifecycle</h2>
+                    <img src="img/docker_terms_04.png" class="stretch" style="background:#f5f5f5;"/>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
+                    <h2>Docker CLI Basics</h2>
+                    <p>$ sudo docker</p>
+                    <ul>
+                        <li><strong>ps</strong>: List <em>containers</em></li>
+                        <li><strong>images</strong>: List <em>images</em></li>
+                        <li><strong>run</strong>: Create container from image</li>
+                        <li><strong>start/stop</strong>: Stop a container</li>
+                        <li><strong>build</strong>: Create an image from a Dockerfile</li>
+                        <li><strong>inspect</strong>: Inspect an image</li>
+                        <li><strong>logs</strong>: Review STD(OUT|ERR) from a container</li>
+                    </ul>
                     <aside class="notes">
                     </aside>
                 </section>
@@ -313,21 +365,6 @@
                 <section data-background="img/dirtyhands.jpg">
                     <h1>Let's Get Our Hands Dirty</h1>
                     <!-- Image Courtesy of http://www.flickr.com/photos/film_fatale/6784851995/ -->
-                    <aside class="notes">
-                    </aside>
-                </section>
-                <section>
-                    <h2>Docker CLI Basics</h2>
-                    <p>$ sudo docker</p>
-                    <ul>
-                        <li><strong>ps</strong>: List <em>containers</em></li>
-                        <li><strong>images</strong>: List <em>images</em></li>
-                        <li><strong>run</strong>: Create container from image</li>
-                        <li><strong>start/stop</strong>: Stop a container</li>
-                        <li><strong>build</strong>: Create an image from a Dockerfile</li>
-                        <li><strong>inspect</strong>: Inspect an image</li>
-                        <li><strong>logs</strong>: Review STD(OUT|ERR) from a container</li>
-                    </ul>
                     <aside class="notes">
                     </aside>
                 </section>
@@ -374,6 +411,12 @@ vagrant@precise64:~/docker$ sudo docker ps
 ID                  IMAGE               COMMAND             CREATED             STATUS              PORTS
 					</code></pre>
 				</section>
+                <section>
+                    <h2>Docker Lifecycle</h2>
+                    <img src="img/docker_terms_04.png" class="stretch" style="background:#f5f5f5;"/>
+                    <aside class="notes">
+                    </aside>
+                </section>
                 <section>
                     <h2>Try it again, with more daemon!</h2>
                     <pre class="stretch"><code data-trim>
@@ -646,11 +689,23 @@ redis 127.0.0.1:49173> lrange numbers 0 5
                     </code></pre>
                 </section>
                 <section>
-                    <h2>Ideally..</h2>
-                    <p>
-                    * TODO demo building an app (off index? Image svc?)
-                    * Pushing it to cloud
-                    </p>
+                    <h2>The Docker Index Is Cool</h2>
+                    <pre class="stretch"><code data-trim>
+vagrant@precise64:~/docker-registry$ sudo docker pull crosbymichael/ipython
+Pulling repository crosbymichael/ipython
+5c69fc56f7ef: Download complete
+b83fe8498b94: Download complete
+e7162f69e18e: Download complete
+....
+vagrant@precise64:~/docker-registry$ sudo docker run -d crosbymichael/ipython
+5bcdaa4f7a2f
+vagrant@precise64:~/docker-registry$ sudo docker ps
+ID                  IMAGE                            COMMAND               PORTS
+5bcdaa4f7a2f        crosbymichael/ipython:latest     /bin/sh -c ipython n  49155->8888
+                    </code></pre>
+                </section>
+                <section>
+                    <img class="stretch" src="img/ipython_nb.png" />
                     <aside class="notes">
                     </aside>
                 </section>
@@ -671,15 +726,18 @@ redis 127.0.0.1:49173> lrange numbers 0 5
                     </aside>
                 </section>
                 <section>
-                    <h2>But Docker is Crazy.</h2>
+                    <h2>But Docker is <em>Crazy.</em></h2>
                     <ul>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
+                        <li><strong>PaaS</strong>: Cocaine (!!!!), dotCloud, Deis, OpenShift, Flynn, Dokku.. </li>
+                        <li><strong>IaaS</strong>: OpenStack (Standard in Havana)</li>
+                        <li><strong>VPS</strong>: Many/Most providers possible if not easy (Linode, DO)</li>
+                        <li><strong>Distros</strong>: CoreOS</li>
+                        <li><strong>Config Management</strong>: Puppet, Chef, Salt, Ansible</li>
+                        <li><strong>Orchestration</strong>: Heat, Maestro, Mesos, Toscanni</li>
+                        <li><strong>Dashboards</strong>: Docker-UI, Shipyard, Horizon</li>
                     </ul>
                     <aside class="notes">
+                    I want to show off some of the OpenStack integration particularly.
                     </aside>
                 </section>
                 <section>
@@ -722,8 +780,8 @@ b98d764d109d  samalba/mysql:latest      /start_mysqld.sh      49173->3306
                     <h2>Security</h2>
                     <ul>
                         <li>Pretty tested stuff</li>
-                        <li>Ubuntu ships with extra hardening</li>
-                        <li>Can be layered (e.g. OpenShift)</li>
+                        <li>Ubuntu ships with extra hardening (AppArmor vs /proc/sys*)</li>
+                        <li>Can be layered (e.g. OpenShift, SELinux)</li>
                         <li>Lower priv mode coming soon</li>
                         <li>New challenges (library/distro sprawl.)</li>
                     </ul>
