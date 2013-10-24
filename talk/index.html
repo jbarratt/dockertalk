@@ -317,6 +317,12 @@
                     </aside>
                 </section>
                 <section>
+                    <h2>Docker Lifecycle</h2>
+                    <img src="img/docker_terms_05.png" class="stretch" style="background:#f5f5f5;"/>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section>
                     <h2>Docker CLI Basics</h2>
                     <p>$ sudo docker</p>
                     <ul>
@@ -709,9 +715,9 @@ ID                  IMAGE                            COMMAND               PORTS
                     <aside class="notes">
                     </aside>
                 </section>
-                <section>
-                    <h2>Ecosystem</h2>
-                    <p>Huge and Growing.</p>
+                <section data-background="img/ecosystem.jpg">
+                    <h1>Ecosystem:</h1>
+                    <h2>Huge and Growing.</h2>
                     <aside class="notes">
                     </aside>
                 </section>
@@ -776,14 +782,31 @@ b98d764d109d  samalba/mysql:latest      /start_mysqld.sh      49173->3306
                     <aside class="notes">
                     </aside>
                 </section>
-                <section>
+                <section data-background="img/crusty_lock.jpg">
+                    <!-- http://www.flickr.com/photos/72526969@N00/7737313/ -->
                     <h2>Security</h2>
                     <ul>
                         <li>Pretty tested stuff</li>
                         <li>Ubuntu ships with extra hardening (AppArmor vs /proc/sys*)</li>
                         <li>Can be layered (e.g. OpenShift, SELinux)</li>
                         <li>Lower priv mode coming soon</li>
-                        <li>New challenges (library/distro sprawl.)</li>
+                        <li>Docker Index, Handle With Care. (Build Dockerfiles)</li>
+                    </ul>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                <section data-background="img/crusty_lock.jpg">
+                    <h2>New Challenges: Increased surface area & sprawl. (openssl!)</h2>
+                    <ul>
+                        <li class="fragment">Can't just check w/ each box's package manager.</li>
+                        <li class="fragment">More apps means more apps means more to learn. Making it easy to deploy node doesn't mean your ops team knows how, follows the right security lists, etc.</li>
+                    </ul>
+                    <h3 class="fragment">BUT</h3>
+                    <ul>
+                        <li class="fragment">Less cases where this happens, only the libs we care about. (not sshd too, for example.)</li>
+                        <li class="fragment">Low surface area if an exploit does happen</li>
+                        <li class="fragment">Lower friction to do upgrades (mysql vs apache2)</li>
+                        <li class="fragment">Proper Docker layering actually means less sprawl than you think.</li>
                     </ul>
                     <aside class="notes">
                     </aside>
@@ -814,7 +837,8 @@ $ sudo docker
                     </aside>
                 </section>
                 <section>
-                    <h2>Bonus: Dockception!</h2>
+                    <h4>Bonus: Dockception!</h4>
+                    <img src="img/top.gif" />
                     <pre class="stretch"><code data-trim>
 FROM ubuntu
 MAINTAINER Joshua Barratt jbarratt@serialized.net
