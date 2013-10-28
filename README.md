@@ -4,7 +4,7 @@
 
 A talk about Container technology in general, with a focus on Docker.
 
-Open ``talk/index.html`` for the source, or [view it live](https://rawgithub.com/jbarratt/dockertalk/master/talk/index.html).
+Open ``talk/index.html`` for the source, or [view it live](http://serialized.net/dockertalk/).
 
 ## Files in this repo
 
